@@ -2,3 +2,5 @@
 /.git
 /java-backend/.DS_Store
 /java-backend/src/.DS_Store
+/java-backend/.idea/
+/java-backend/target/
