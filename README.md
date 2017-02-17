@@ -20,4 +20,4 @@ Technologies used:
 Installation:
 -------------
 
-Check the front end and back end folders for instructions on how to get them running individually.
+Check the front-end and back-end folders for instructions on how to get them running individually.
