@@ -1,7 +1,8 @@
 package com.usmanjamil.flightsite.services;
 
-import com.usmanjamil.flightsite.Application;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.usmanjamil.flightsite.model.Auth0User;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,8 +35,13 @@ public class UserService {
 
             Auth0User user = new Auth0User(clientId, email, password, connection);
 
-            RestTemplate template = new RestTemplate();
-            template.postForObject("https://usmanj.eu.auth0.com/dbconnections/signup", user, Auth0User.class);
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+
+            restTemplate.postForObject("https://usmanj.eu.auth0.com/dbconnections/signup", user, Auth0User.class);
 
 
         } catch (IOException e) {
