@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.usmanjamil.flightsite.services;
 
+import com.usmanjamil.flightsite.Application;
 import com.usmanjamil.flightsite.model.Auth0User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -26,15 +21,18 @@ public class UserService {
         InputStream input = null;
 
         try {
-            input = new FileInputStream("auth0.properties");
-            prop.load(input);
+            String filename = "auth0.properties";
+            input = getClass().getClassLoader().getResourceAsStream(filename);
+            if(input==null){
+                System.out.println("Sorry, unable to find " + filename);
+                return null;
+            }
 
-            System.out.println(prop.getProperty("auth0.clientId"));
+            prop.load(input);
             String clientId = prop.getProperty("auth0.clientId");
             String connection = "flightsite";
 
             Auth0User user = new Auth0User(clientId, email, password, connection);
-
 
             RestTemplate template = new RestTemplate();
             template.postForObject("https://usmanj.eu.auth0.com/dbconnections/signup", user, Auth0User.class);
