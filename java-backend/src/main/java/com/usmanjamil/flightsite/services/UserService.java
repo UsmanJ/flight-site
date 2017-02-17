@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,6 +25,7 @@ public class UserService {
     public String signUp(String email, String password) {
         Properties prop = new Properties();
         InputStream input = null;
+        String response = null;
 
         try {
             String filename = "auth0.properties";
@@ -38,8 +40,6 @@ public class UserService {
             String connection = "Username-Password-Authentication";
 
             Auth0User user = new Auth0User(clientId, email, password, connection);
-//            JSONObject jsonUser = new JSONObject(user);
-//            String stringUser = jsonUser.toString();
 
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(user);
@@ -51,7 +51,7 @@ public class UserService {
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             HttpEntity<String> entity = new HttpEntity<String>(json, headers);
-            restTemplate.postForObject(url, entity, String.class);
+            response = restTemplate.postForObject(url, entity, String.class);
 
 
         } catch (IOException e) {
@@ -67,6 +67,6 @@ public class UserService {
             }
         }
 
-        return null;
+        return response;
     }
 }
