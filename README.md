@@ -1,6 +1,5 @@
 # flight-site
 Flight search webapp with react front-end and java back-end
-======================
 
 Synopsis
 --------
