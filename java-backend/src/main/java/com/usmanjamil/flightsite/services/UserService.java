@@ -1,8 +1,12 @@
 package com.usmanjamil.flightsite.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.usmanjamil.flightsite.model.Auth0User;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,17 +35,23 @@ public class UserService {
 
             prop.load(input);
             String clientId = prop.getProperty("auth0.clientId");
-            String connection = "flightsite";
+            String connection = "Username-Password-Authentication";
 
             Auth0User user = new Auth0User(clientId, email, password, connection);
+//            JSONObject jsonUser = new JSONObject(user);
+//            String stringUser = jsonUser.toString();
+
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(user);
+
 
             RestTemplate restTemplate = new RestTemplate();
-            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
-            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+            String url = "https://usmanj.eu.auth0.com/dbconnections/signup";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
 
-
-            restTemplate.postForObject("https://usmanj.eu.auth0.com/dbconnections/signup", user, Auth0User.class);
+            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+            restTemplate.postForObject(url, entity, String.class);
 
 
         } catch (IOException e) {

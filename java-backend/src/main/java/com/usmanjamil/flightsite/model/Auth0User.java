@@ -5,11 +5,18 @@
  */
 package com.usmanjamil.flightsite.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+
 /**
  *
  * @author usmanjamil
  */
-public class Auth0User {
+@Getter
+@Setter
+public class Auth0User implements Serializable{
     private String client_id;
     private String email;
     private String password;

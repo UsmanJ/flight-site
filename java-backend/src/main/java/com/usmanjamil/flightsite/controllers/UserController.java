@@ -40,10 +40,8 @@ public class UserController {
     public Response signUp(@RequestBody String input) {
         JSONObject obj = new JSONObject(input);
 
-        LOG.debug(input);
         String signUp = userService.signUp(obj.getString("email"), obj.getString("password"));
-        
-        
+
         return Response.ok(signUp).build();
     }
 }
