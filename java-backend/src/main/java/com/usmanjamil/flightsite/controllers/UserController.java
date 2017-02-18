@@ -44,4 +44,31 @@ public class UserController {
 
         return Response.ok(signUp).build();
     }
+
+    @RequestMapping(
+            value = "/user/sign-in",
+            method = RequestMethod.POST,
+            produces = "application/json",
+            consumes ="application/json"
+    )
+    @ResponseBody
+    public Response signIn(@RequestBody String input) {
+        JSONObject obj = new JSONObject(input);
+
+        String signIn = userService.signIn(obj.getString("username"), obj.getString("password"));
+
+        return Response.ok(signIn).build();
+    }
+
+    @RequestMapping(
+            value = "/user/logout",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public Response logout() {
+
+        String logout = userService.logout();
+
+        return Response.ok(logout).build();
+    }
 }
