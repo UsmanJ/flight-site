@@ -71,4 +71,19 @@ public class UserController {
 
         return Response.ok(logout).build();
     }
+
+    @RequestMapping(
+            value = "/user/change-password",
+            method = RequestMethod.POST,
+            produces = "application/json",
+            consumes ="application/json"
+    )
+    @ResponseBody
+    public Response changePassword(@RequestBody String input) {
+        JSONObject obj = new JSONObject(input);
+
+        String changePassword = userService.changePassword(obj.getString("email"), obj.getString("password"));
+
+        return Response.ok(changePassword).build();
+    }
 }

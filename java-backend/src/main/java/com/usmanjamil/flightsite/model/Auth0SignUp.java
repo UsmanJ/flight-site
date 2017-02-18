@@ -28,5 +28,4 @@ public class Auth0SignUp implements Serializable{
         this.password = password;
         this.connection = connection;
     }
-    
 }
