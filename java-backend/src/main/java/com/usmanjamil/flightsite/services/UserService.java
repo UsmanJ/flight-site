@@ -3,9 +3,7 @@ package com.usmanjamil.flightsite.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usmanjamil.flightsite.model.Auth0SignIn;
 import com.usmanjamil.flightsite.model.Auth0SignUp;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -92,10 +90,23 @@ public class UserService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+
+            String test = "{\n" +
+                    "  \"client_id\": \"zBdm95InX6j3fseclCAQDs1uB0cBtGHi\",\n" +
+                    "  \"username\": \"usman.jamil@live.co.uk\",\n" +
+                    "  \"password\": \"hello1\",\n" +
+                    "  \"connection\": \"Username-Password-Authentication\",\n" +
+                    "  \"scope\": \"openid\"\n" +
+                    "}";
+
+            HttpEntity<String> entity = new HttpEntity<>(test, headers);
 
             RestTemplate restTemplate = new RestTemplate();
-            response = restTemplate.postForObject(url, entity, String.class);
+
+            ResponseEntity<String> apiResponse = restTemplate
+                    .exchange(url, HttpMethod.POST, entity, String.class);
+
+            apiResponse.getBody();
 
         } catch (IOException e) {
             e.printStackTrace();
