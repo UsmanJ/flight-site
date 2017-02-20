@@ -1,8 +1,9 @@
 package com.usmanjamil.flightsite.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.GsonBuilder;
 import com.usmanjamil.flightsite.model.Auth0SignIn;
-import com.usmanjamil.flightsite.model.Auth0SignUp;
+import com.usmanjamil.flightsite.model.Auth0User;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -36,7 +37,7 @@ public class UserService {
             String url = prop.getProperty("auth0.signUp");
             String connection = prop.getProperty("auth0.connection");
 
-            Auth0SignUp user = new Auth0SignUp(clientId, email, password, connection);
+            Auth0User user = new Auth0User(clientId, email, password, connection);
 
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(user);
@@ -85,28 +86,19 @@ public class UserService {
 
             Auth0SignIn user = new Auth0SignIn(clientId, username, password, connection, scope);
 
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(user);
+            String json = new GsonBuilder().create().toJson(user);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            String test = "{\n" +
-                    "  \"client_id\": \"zBdm95InX6j3fseclCAQDs1uB0cBtGHi\",\n" +
-                    "  \"username\": \"usman.jamil@live.co.uk\",\n" +
-                    "  \"password\": \"hello1\",\n" +
-                    "  \"connection\": \"Username-Password-Authentication\",\n" +
-                    "  \"scope\": \"openid\"\n" +
-                    "}";
-
-            HttpEntity<String> entity = new HttpEntity<>(test, headers);
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
             ResponseEntity<String> apiResponse = restTemplate
                     .exchange(url, HttpMethod.POST, entity, String.class);
 
-            apiResponse.getBody();
+            response = apiResponse.getBody();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -159,7 +151,7 @@ public class UserService {
         return response;
     }
 
-    public String changePassword(String email, String password) {
+    public String changePassword(String email) {
         Properties prop = new Properties();
         InputStream input = null;
         String response = null;
@@ -176,18 +168,22 @@ public class UserService {
             String clientId = prop.getProperty("auth0.clientId");
             String url = prop.getProperty("auth0.changePassword");
             String connection = prop.getProperty("auth0.connection");
+            String password = "";
 
-            Auth0SignUp user = new Auth0SignUp(clientId, email, password, connection);
+            Auth0User user = new Auth0User(clientId, email, password, connection);
 
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(user);
+            String json = new GsonBuilder().create().toJson(user);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<String>(json, headers);
 
             RestTemplate restTemplate = new RestTemplate();
-            response = restTemplate.postForObject(url, entity, String.class);
+
+            ResponseEntity<String> apiResponse = restTemplate
+                    .exchange(url, HttpMethod.POST, entity, String.class);
+
+            response = apiResponse.getBody();
 
         } catch (IOException e) {
             e.printStackTrace();

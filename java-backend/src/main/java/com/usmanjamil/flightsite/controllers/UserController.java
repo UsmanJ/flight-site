@@ -82,7 +82,7 @@ public class UserController {
     public Response changePassword(@RequestBody String input) {
         JSONObject obj = new JSONObject(input);
 
-        String changePassword = userService.changePassword(obj.getString("email"), obj.getString("password"));
+        String changePassword = userService.changePassword(obj.getString("email"));
 
         return Response.ok(changePassword).build();
     }

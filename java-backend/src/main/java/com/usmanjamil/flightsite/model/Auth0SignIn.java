@@ -18,14 +18,14 @@ import java.io.Serializable;
 @Setter
 public class Auth0SignIn implements Serializable{
     private String client_id;
-    private String email;
+    private String username;
     private String password;
     private String connection;
     private String scope;
 
-    public Auth0SignIn(String client_id, String email, String password, String connection, String scope) {
+    public Auth0SignIn(String client_id, String username, String password, String connection, String scope) {
         this.client_id = client_id;
-        this.email = email;
+        this.username = username;
         this.password = password;
         this.connection = connection;
         this.scope = scope;
