@@ -1,7 +1,5 @@
 package com.usmanjamil.flightsite.services;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 /**
