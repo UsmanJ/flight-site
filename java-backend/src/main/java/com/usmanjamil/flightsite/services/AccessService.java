@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AccessService {
+    private  String idToken;
     private String accessToken;
     private static AccessService instance = null;
 
@@ -29,5 +30,13 @@ public class AccessService {
 
     public String getAccessToken() {
         return this.accessToken;
+    }
+
+    public void setIdToken(String idToken) {
+        this.idToken = idToken;
+    }
+
+    public String getIdToken() {
+        return this.idToken;
     }
 }

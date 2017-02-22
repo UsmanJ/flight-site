@@ -1,6 +1,7 @@
 package com.usmanjamil.flightsite.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.usmanjamil.flightsite.model.Auth0SignIn;
 import com.usmanjamil.flightsite.model.Auth0User;
@@ -116,7 +117,9 @@ public class UserService {
             JSONObject obj = new JSONObject(response);
 
             String accessToken = obj.getString("access_token");
+            String idToken = obj.getString("id_token");
             AccessService.getInstance().setAccessToken(accessToken);
+            AccessService.getInstance().setIdToken(idToken);
         }
 
         return response;
@@ -154,6 +157,7 @@ public class UserService {
             }
 
             AccessService.getInstance().setAccessToken(null);
+            AccessService.getInstance().setIdToken(null);
         }
 
         return response;
@@ -181,6 +185,54 @@ public class UserService {
             Auth0User user = new Auth0User(clientId, email, password, connection);
 
             String json = new GsonBuilder().create().toJson(user);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            ResponseEntity<String> apiResponse = restTemplate
+                    .exchange(url, HttpMethod.POST, entity, String.class);
+
+            response = apiResponse.getBody();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(input != null) {
+                try {
+
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return response;
+    }
+
+    public String getProfile() {
+        Properties prop = new Properties();
+        InputStream input = null;
+        String response = null;
+
+        try {
+            String filename = "auth0.properties";
+            input = getClass().getClassLoader().getResourceAsStream(filename);
+            if(input==null){
+                System.out.println("Sorry, unable to find " + filename);
+                return null;
+            }
+
+            prop.load(input);
+            String url = prop.getProperty("auth0.getProfile");
+
+            JSONObject obj = new JSONObject();
+            String idToken = AccessService.getInstance().getIdToken();
+            obj.put("id_token", idToken);
+            String json = obj.toString();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
