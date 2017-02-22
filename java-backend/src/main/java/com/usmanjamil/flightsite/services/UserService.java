@@ -46,7 +46,7 @@ public class UserService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
             RestTemplate restTemplate = new RestTemplate();
             response = restTemplate.postForObject(url, entity, String.class);
@@ -188,7 +188,7 @@ public class UserService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -236,7 +236,7 @@ public class UserService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
