@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
 import com.usmanjamil.flightsite.model.Auth0SignIn;
 import com.usmanjamil.flightsite.model.Auth0User;
+import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -111,6 +112,11 @@ public class UserService {
                     e.printStackTrace();
                 }
             }
+
+            JSONObject obj = new JSONObject(response);
+
+            String accessToken = obj.getString("access_token");
+            AccessService.getInstance().setAccessToken(accessToken);
         }
 
         return response;
@@ -133,7 +139,7 @@ public class UserService {
             String url = prop.getProperty("auth0.logout");
 
             RestTemplate restTemplate = new RestTemplate();
-            response = restTemplate.getForObject(url, null, String.class);
+            response = restTemplate.getForObject(url, String.class);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -146,6 +152,8 @@ public class UserService {
                     e.printStackTrace();
                 }
             }
+
+            AccessService.getInstance().setAccessToken(null);
         }
 
         return response;

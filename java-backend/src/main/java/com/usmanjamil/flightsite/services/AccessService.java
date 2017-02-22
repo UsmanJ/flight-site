@@ -1,5 +1,7 @@
 package com.usmanjamil.flightsite.services;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,14 +9,25 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AccessService {
+    private String accessToken;
     private static AccessService instance = null;
-    protected AccessService() {
+
+    private AccessService() {
         // Exists only to defeat instantiation.
     }
+
     public static AccessService getInstance() {
         if(instance == null) {
             instance = new AccessService();
         }
         return instance;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return this.accessToken;
     }
 }
