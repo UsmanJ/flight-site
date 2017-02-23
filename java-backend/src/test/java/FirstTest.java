@@ -23,6 +23,9 @@ public class FirstTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private RestTemplate restTemplate;
+
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
@@ -53,9 +56,6 @@ public class FirstTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
-
-
-        RestTemplate restTemplate = new RestTemplate();
 
         Mockito.when(restTemplate
                 .exchange(url, HttpMethod.POST, entity, String.class)).thenReturn(aValidResponse());
