@@ -58,10 +58,11 @@ public class FirstTest {
         RestTemplate restTemplate = new RestTemplate();
 
         Mockito.when(restTemplate
-                .exchange(url, HttpMethod.POST, entity, String.class)).thenReturn(aJson());
+                .exchange(url, HttpMethod.POST, entity, String.class)).thenReturn(aValidResponse());
     }
 
-    private String aJson() {
-        return "{...}";
+    private ResponseEntity<String> aValidResponse() {
+        return new ResponseEntity("{}", HttpStatus.OK);
     }
+
 }
