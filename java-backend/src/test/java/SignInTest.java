@@ -16,7 +16,7 @@ import java.util.Properties;
 /**
  * Created by usmanjamil on 23/02/2017.
  */
-public class SignInApiTest {
+public class SignInTest {
     @Mock
     private RestTemplate restTemplate;
 
@@ -29,7 +29,7 @@ public class SignInApiTest {
     }
 
     @Test
-    public void testSignInApi() throws Exception {
+    public void testSignIn() throws Exception {
         Properties prop = new Properties();
         String filename = "auth0.properties";
         InputStream input = getClass().getClassLoader().getResourceAsStream(filename);
