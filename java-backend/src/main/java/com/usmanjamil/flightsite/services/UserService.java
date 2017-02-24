@@ -19,7 +19,7 @@ import java.util.Properties;
  * @author usmanjamil
  */
 @Service
-public class UserService {
+public class UserService implements UserServiceI {
      
     public String signUp(String email, String password) {
         Properties prop = new Properties();
