@@ -13,5 +13,4 @@ public interface UserServiceI {
     String changePassword(String email);
 
     String getProfile();
-
 }

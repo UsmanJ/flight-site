@@ -1,5 +1,6 @@
 package com.usmanjamil.flightsite.controllers;
 
+import com.usmanjamil.flightsite.services.ForgerockUserService;
 import com.usmanjamil.flightsite.services.UserService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -29,7 +30,10 @@ public class UserController {
     
     @Autowired
     private UserService userService;
-    
+
+    private ForgerockUserService forgerockUserService;
+
+
     @RequestMapping(
         value = "/user/sign-up", 
         method = RequestMethod.POST, 
@@ -40,7 +44,10 @@ public class UserController {
     public Response signUp(@RequestBody String input) {
         JSONObject obj = new JSONObject(input);
 
-        String signUp = userService.signUp(obj.getString("email"), obj.getString("password"));
+//        String signUp = userService.signUp(obj.getString("email"), obj.getString("password"));
+
+        String signUp = forgerockUserService.signUp(obj.getString("email"));
+
 
         return Response.ok(signUp).build();
     }

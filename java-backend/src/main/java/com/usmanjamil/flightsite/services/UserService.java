@@ -1,7 +1,6 @@
 package com.usmanjamil.flightsite.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.usmanjamil.flightsite.model.Auth0SignIn;
 import com.usmanjamil.flightsite.model.Auth0User;
