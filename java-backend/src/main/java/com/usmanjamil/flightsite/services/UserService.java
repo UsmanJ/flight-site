@@ -6,6 +6,9 @@ import com.google.gson.GsonBuilder;
 import com.usmanjamil.flightsite.model.Auth0SignIn;
 import com.usmanjamil.flightsite.model.Auth0User;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +22,11 @@ import java.util.Properties;
  * @author usmanjamil
  */
 @Service
+@PropertySource("classpath:auth0.properties")
 public class UserService {
+
+    @Autowired
+    private Environment env;
      
     public String signUp(String email, String password) {
         Properties prop = new Properties();
@@ -81,7 +88,7 @@ public class UserService {
             }
 
             prop.load(input);
-            String clientId = prop.getProperty("auth0.clientId");
+            String clientId = env.getProperty("auth0.clientId");
             String url = prop.getProperty("auth0.signIn");
             String connection = prop.getProperty("auth0.connection");
             String scope = prop.getProperty("auth0.scope");
