@@ -1,18 +1,19 @@
 package com.usmanjamil.flightsite.services;
 
 import com.usmanjamil.flightsite.utils.PropertyUtils;
+import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.json.Json;
-import javax.json.JsonObject;
+//import javax.json.Json;
+//import javax.json.JsonObject;
 
 /**
  * Created by usmanjamil on 24/02/2017.
  */
 @Service
-public abstract class ForgerockUserService implements UserServiceI {
+public class ForgerockUserService implements UserServiceI {
 
     public String signUp(String email) {
 
@@ -47,25 +48,50 @@ public abstract class ForgerockUserService implements UserServiceI {
 
         String PostRequestUrl = new PropertyUtils().getProperty(fileName, propertyName);
 
-        JsonObject obj = Json.createObjectBuilder()
-                .add("input", Json.createObjectBuilder()
-                    .add("mail", email))
-                .build();
+//        JsonObject obj = Json.createObjectBuilder()
+//                .add("input", Json.createObjectBuilder()
+//                    .add("mail", email))
+//                .build();
 
-        String json = obj.toString();
+//        String json = obj.toString();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(json, headers);
+//        HttpEntity<String> entity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<String> apiResponse = restTemplate
-                .exchange(PostRequestUrl, HttpMethod.POST, entity, String.class);
+//        ResponseEntity<String> apiResponse = restTemplate
+//                .exchange(PostRequestUrl, HttpMethod.POST, entity, String.class);
 
-        response = apiResponse.getBody();
+//        response = apiResponse.getBody();
 
-        return response;
+//        return response;
 
+        return null;
     }
 
+    @Override
+    public String signUp(String email, String password) {
+        return null;
+    }
+
+    @Override
+    public String signIn(String username, String password) {
+        return null;
+    }
+
+    @Override
+    public String logout() {
+        return null;
+    }
+
+    @Override
+    public String changePassword(String email) {
+        return null;
+    }
+
+    @Override
+    public String getProfile() {
+        return null;
+    }
 }

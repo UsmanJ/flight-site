@@ -31,8 +31,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
     private ForgerockUserService forgerockUserService;
-
 
     @RequestMapping(
         value = "/user/sign-up", 
