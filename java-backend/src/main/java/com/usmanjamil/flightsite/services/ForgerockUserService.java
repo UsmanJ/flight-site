@@ -42,32 +42,33 @@ public class ForgerockUserService implements UserServiceI {
     }
 
     private String registerEmailAddress(String email) {
+
         String fileName = "forgerock.properties";
         String propertyName = "forgerock.registerationPost";
         String response;
 
         String PostRequestUrl = new PropertyUtils().getProperty(fileName, propertyName);
 
-//        JsonObject obj = Json.createObjectBuilder()
-//                .add("input", Json.createObjectBuilder()
-//                    .add("mail", email))
-//                .build();
+        JSONObject obj = new JSONObject();
+        JSONObject innerObj = new JSONObject();
+        innerObj.put("mail", email);
+        obj.put("input", innerObj);
 
-//        String json = obj.toString();
+        String json = obj.toString();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-//        HttpEntity<String> entity = new HttpEntity<>(json, headers);
+        HttpEntity<String> entity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-//        ResponseEntity<String> apiResponse = restTemplate
-//                .exchange(PostRequestUrl, HttpMethod.POST, entity, String.class);
+        ResponseEntity<String> apiResponse = restTemplate
+                .exchange(PostRequestUrl, HttpMethod.POST, entity, String.class);
 
-//        response = apiResponse.getBody();
+        System.out.println(apiResponse.getBody());
 
-//        return response;
+        response = apiResponse.getBody();
 
-        return null;
+        return response;
     }
 
     @Override

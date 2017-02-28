@@ -46,7 +46,7 @@ public class UserController {
 
 //        String signUp = userService.signUp(obj.getString("email"), obj.getString("password"));
 
-        String signUp = forgerockUserService.signUp(obj.getString("email"));
+        String signUp = forgerockUserService.signUp(obj.getString("mail"));
 
 
         return Response.ok(signUp).build();
