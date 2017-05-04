@@ -86,4 +86,18 @@ public class UserController {
 
         return Response.ok(changePassword).build();
     }
+
+    @RequestMapping(
+            value = "/user/get-profile",
+            method = RequestMethod.POST,
+            produces = "application/json",
+            consumes ="application/json"
+    )
+    @ResponseBody
+    public Response getProfile() {
+
+        String profile = userService.getProfile();
+
+        return Response.ok(profile).build();
+    }
 }

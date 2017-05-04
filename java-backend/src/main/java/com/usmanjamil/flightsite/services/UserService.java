@@ -1,9 +1,14 @@
 package com.usmanjamil.flightsite.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.usmanjamil.flightsite.model.Auth0SignIn;
 import com.usmanjamil.flightsite.model.Auth0User;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +22,11 @@ import java.util.Properties;
  * @author usmanjamil
  */
 @Service
+@PropertySource("classpath:auth0.properties")
 public class UserService {
+
+    @Autowired
+    private Environment env;
      
     public String signUp(String email, String password) {
         Properties prop = new Properties();
@@ -44,7 +53,7 @@ public class UserService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
             RestTemplate restTemplate = new RestTemplate();
             response = restTemplate.postForObject(url, entity, String.class);
@@ -79,7 +88,7 @@ public class UserService {
             }
 
             prop.load(input);
-            String clientId = prop.getProperty("auth0.clientId");
+            String clientId = env.getProperty("auth0.clientId");
             String url = prop.getProperty("auth0.signIn");
             String connection = prop.getProperty("auth0.connection");
             String scope = prop.getProperty("auth0.scope");
@@ -111,6 +120,13 @@ public class UserService {
                     e.printStackTrace();
                 }
             }
+
+            JSONObject obj = new JSONObject(response);
+
+            String accessToken = obj.getString("access_token");
+            String idToken = obj.getString("id_token");
+            AccessService.getInstance().setAccessToken(accessToken);
+            AccessService.getInstance().setIdToken(idToken);
         }
 
         return response;
@@ -133,7 +149,7 @@ public class UserService {
             String url = prop.getProperty("auth0.logout");
 
             RestTemplate restTemplate = new RestTemplate();
-            response = restTemplate.getForObject(url, null, String.class);
+            response = restTemplate.getForObject(url, String.class);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -146,6 +162,9 @@ public class UserService {
                     e.printStackTrace();
                 }
             }
+
+            AccessService.getInstance().setAccessToken(null);
+            AccessService.getInstance().setIdToken(null);
         }
 
         return response;
@@ -176,7 +195,55 @@ public class UserService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            ResponseEntity<String> apiResponse = restTemplate
+                    .exchange(url, HttpMethod.POST, entity, String.class);
+
+            response = apiResponse.getBody();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(input != null) {
+                try {
+
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return response;
+    }
+
+    public String getProfile() {
+        Properties prop = new Properties();
+        InputStream input = null;
+        String response = null;
+
+        try {
+            String filename = "auth0.properties";
+            input = getClass().getClassLoader().getResourceAsStream(filename);
+            if(input==null){
+                System.out.println("Sorry, unable to find " + filename);
+                return null;
+            }
+
+            prop.load(input);
+            String url = prop.getProperty("auth0.getProfile");
+
+            JSONObject obj = new JSONObject();
+            String idToken = AccessService.getInstance().getIdToken();
+            obj.put("id_token", idToken);
+            String json = obj.toString();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
